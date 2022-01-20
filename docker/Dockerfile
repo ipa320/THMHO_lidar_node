@@ -13,7 +13,7 @@ ENV CATKIN_WS=/root/catkin_ws
 RUN mkdir -p $CATKIN_WS/src
 WORKDIR $CATKIN_WS/src
 
-RUN git clone https://github.com/ipa320/THMHO_lidar_node.git
+RUN git clone https://github.com/ramp-eu/THMHO_lidar_node.git
 
 RUN	cd THMHO_lidar_node \
 	&& wstool init . \
@@ -23,14 +23,9 @@ RUN	cd THMHO_lidar_node \
 WORKDIR $CATKIN_WS
 RUN echo "Pulling & Compiling THMHO lidar node" \
 	&& source /opt/ros/noetic/setup.bash \
-	&& apt-get install ros-noetic-tf2-msgs \
+	&& apt-get install ros-noetic-tf2 -y && apt-get install ros-noetic-tf -y \
 	&& catkin_make \
     && rm -rf /var/lib/apt/lists/*
 
-RUN echo "source /entrypoint.sh" >> /root/.bashrc
+ENTRYPOINT ["/root/run.sh"]
 
-COPY ./entrypoint.sh /
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["bash"]
